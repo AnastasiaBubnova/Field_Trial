@@ -1,0 +1,13 @@
+class: SQL
+Title: MAX (tx_phy_rate) for all active devices
+Query:
+SELECT MAX (assoc.tx_phy_rate), oemap.mac_addr, oemap.name, loc.country
+FROM qh_rest_assoc assoc
+JOIN qh_rest_oemdevice oem ON assoc.assoc_id = oem.id
+JOIN qh_rest_oemdevice oemap ON assoc.reporting_id = oemap.id
+JOIN qh_rest_qdevice qdev ON qdev.oemdevice_ptr_id = assoc.reporting_id
+JOIN qh_rest_location loc ON loc.id = qdev.location_id
+WHERE group_id = 8
+AND assoc.timestamp BETWEEN '20161101' and '20161201'
+GROUP BY oemap.mac_addr, oemap.name, loc.country
+ORDER BY loc.country
